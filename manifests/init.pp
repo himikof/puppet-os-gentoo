@@ -52,7 +52,7 @@ class gentoo::etc::portage::restore
     }
   }
   if $gentoo::etc::portage::backup::keywords {
-    file { '/etc/portage/package.keywords/package.keywords.original':
+    file { '/etc/portage/package.accept_keywords/package.keywords.original':
       content => $gentoo::etc::portage::backup::keywords,
       tag     => 'buildhost'
     }
@@ -70,7 +70,7 @@ class gentoo::etc::portage::restore
     }
   }
   if $gentoo::etc::portage::backup::license {
-    file { '/etc/portage/package.license/package.license.original':
+    file { '/etc/portage/package.accept_license/package.license.original':
       content => $gentoo::etc::portage::backup::license,
       tag     => 'buildhost'
     }
@@ -98,8 +98,8 @@ class gentoo::etc::portage
     tag    => 'buildhost'
   }
 
-  file { 'package.keywords::directory':
-    path   => '/etc/portage/package.keywords',
+  file { 'package.accept_keywords::directory':
+    path   => '/etc/portage/package.accept_keywords',
     ensure => 'directory',
     tag    => 'buildhost'
   }
@@ -116,8 +116,8 @@ class gentoo::etc::portage
     tag    => 'buildhost'
   }
 
-  file { 'package.license::directory':
-    path   => '/etc/portage/package.license',
+  file { 'package.accept_license::directory':
+    path   => '/etc/portage/package.accept_license',
     ensure => 'directory',
     tag    => 'buildhost'
   }
@@ -160,9 +160,9 @@ define gentoo_keywords ($context  = '',
                         $keywords = '')
 {
 
-  file { "/etc/portage/package.keywords/${context}":
-    content => "$package $keywords",
-    require => File['package.keywords::directory'],
+  file { "/etc/portage/package.accept_keywords/${context}":
+    content => "$package $keywords\n",
+    require => File['package.accept_keywords::directory'],
     tag    => 'buildhost'
   }
 
@@ -180,7 +180,7 @@ define gentoo_unmask ($context  = '',
 {
 
   file { "/etc/portage/package.unmask/${context}":
-    content => "$package",
+    content => "$package\n",
     require => File['package.unmask::directory'],
     tag    => 'buildhost'
   }
@@ -199,7 +199,7 @@ define gentoo_mask ($context  = '',
 {
 
   file { "/etc/portage/package.mask/${context}":
-    content => "$package",
+    content => "$package\n",
     require => File['package.mask::directory'],
     tag    => 'buildhost'
   }
@@ -219,9 +219,9 @@ define gentoo_license ($context  = '',
                        $license = '')
 {
 
-  file { "/etc/portage/package.license/${context}":
-    content => "$package $license",
-    require => File['package.license::directory'],
+  file { "/etc/portage/package.accept_license/${context}":
+    content => "$package $license\n",
+    require => File['package.accept_license::directory'],
     tag    => 'buildhost'
   }
 
